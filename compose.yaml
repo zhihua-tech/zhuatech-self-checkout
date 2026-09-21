@@ -1,0 +1,16 @@
+services:
+  self-checkout:
+    build: .
+    ports: ["18203:18203"]
+    environment:
+      PORT: 18203
+      CHECKOUT_API_KEY: ${CHECKOUT_API_KEY:-zhuatech-demo-key}
+      CHECKOUT_DATA_FILE: /app/data/checkout.json
+    volumes: ["checkout-data:/app/data"]
+    healthcheck:
+      test: ["CMD","wget","-qO-","http://127.0.0.1:18203/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  checkout-data:
